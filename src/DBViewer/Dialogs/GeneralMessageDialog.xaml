@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<StackLayout
+    x:Class="DbViewer.Dialogs.GeneralMessageDialog"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:dialogs="clr-namespace:DbViewer.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Padding="20"
+    x:DataType="dialogs:GeneralMessageDialogViewModel"
+    BackgroundColor="White"
+    mc:Ignorable="d">
+    <Label Text="{Binding MainBodyText}" />
+    <Button Command="{Binding CloseCommand}" Text="Close" />
+</StackLayout>

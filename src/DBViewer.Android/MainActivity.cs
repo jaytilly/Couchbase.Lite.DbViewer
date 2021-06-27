@@ -39,6 +39,8 @@ namespace DbViewer.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Akavache.Registrations.Start(nameof(DbViewer));
             Couchbase.Lite.Support.Droid.Activate(this);
+
+            Rg.Plugins.Popup.Popup.Init(this);
         }
     }
 }

@@ -80,5 +80,10 @@ namespace DbViewer.Models
         {
             return _database.GetDocument(id);
         }
+
+        public void SaveDocument(MutableDocument document)
+        {
+            _database.Save(document);
+        }
     }
 }

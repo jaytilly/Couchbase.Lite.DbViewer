@@ -179,6 +179,9 @@
     <PackageReference Include="Prism.Forms">
       <Version>8.0.0.1909</Version>
     </PackageReference>
+    <PackageReference Include="Prism.Plugin.Popups">
+      <Version>8.0.76</Version>
+    </PackageReference>
     <PackageReference Include="Refit">
       <Version>6.0.24</Version>
     </PackageReference>

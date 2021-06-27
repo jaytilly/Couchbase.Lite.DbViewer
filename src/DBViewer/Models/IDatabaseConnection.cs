@@ -10,5 +10,6 @@ namespace DbViewer.Models
         List<string> ListAllDocumentIds(bool sort = false);
         Document GetDocumentById(string id);
         bool Disconnect();
+        void SaveDocument(MutableDocument document);
     }
 }

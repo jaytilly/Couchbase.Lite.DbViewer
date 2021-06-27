@@ -30,9 +30,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
     <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="8.0.0.1909" />
     <PackageReference Include="Prism.Forms" Version="8.0.0.1909" />
+    <PackageReference Include="Prism.Plugin.Popups" Version="8.0.76" />
     <PackageReference Include="ReactiveUI" Version="13.2.2" />
     <PackageReference Include="Refit" Version="6.0.24" />
     <PackageReference Include="Refit.Newtonsoft.Json" Version="6.0.24" />
@@ -51,6 +53,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Dialogs\GeneralMessageDialog.xaml.cs">
+      <DependentUpon>GeneralMessageDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ServiceSettingsPage.xaml.cs">
       <DependentUpon>ServiceSettingsPage.xaml</DependentUpon>
     </Compile>
@@ -66,6 +71,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Dialogs\GeneralMessageDialog.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Themes\Styles.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

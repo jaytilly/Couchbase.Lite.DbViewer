@@ -73,6 +73,7 @@ namespace DbViewer.UWP
         private void InitializePlugins()
         {
             Akavache.Registrations.Start(nameof(DbViewer));
+            Rg.Plugins.Popup.Popup.Init();
         }
 
         /// <summary>

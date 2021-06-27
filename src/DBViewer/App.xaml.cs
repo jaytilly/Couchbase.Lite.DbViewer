@@ -1,10 +1,12 @@
 ﻿using Akavache;
 using DbViewer.DataStores;
+using DbViewer.Dialogs;
 using DbViewer.Repos;
 using DbViewer.Services;
 using DbViewer.ViewModels;
 using DbViewer.Views;
 using Prism.Ioc;
+using Prism.Plugin.Popups;
 using Serilog;
 using Xamarin.Essentials;
 using Xamarin.Essentials.Implementation;
@@ -61,6 +63,8 @@ namespace DbViewer
             containerRegistry.RegisterSingleton<IHubRepo, HubRepo>();
             containerRegistry.RegisterSingleton<IPreferences, PreferencesImplementation>();
 
+            containerRegistry.RegisterPopupDialogService();
+
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<CachedDatabaseListPage, CachedDatabaseListViewModel>();
             containerRegistry.RegisterForNavigation<DatabaseBrowserPage, DatabaseBrowserViewModel>();
@@ -70,6 +74,8 @@ namespace DbViewer
             containerRegistry.RegisterForNavigation<HubDetailPage, HubDetailViewModel>();
             containerRegistry.RegisterForNavigation<HubSettingsPage, HubSettingsViewModel>();
             containerRegistry.RegisterForNavigation<ServiceSettingsPage, ServiceSettingsViewModel>();
+
+            containerRegistry.RegisterDialog<GeneralMessageDialog, GeneralMessageDialogViewModel>(DialogNames.General);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Dawn;
 using DbViewer.Shared;
 using DbViewer.Shared.Dtos;
+using DbViewer.Shared.Extensions;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
@@ -42,10 +43,23 @@ namespace DbViewer.Hub.Services
             _logger.LogInformation($"DBRoot dir: {LocalDirectory}");
 
             if (!Directory.Exists(LocalDirectory))
-                return list;
-
-            foreach (var dir in Directory.GetDirectories(LocalDirectory))
             {
+                _logger.LogInformation($"Directory {LocalDirectory} does not exist");
+                return list;
+            }
+
+            var directories = Directory.GetDirectories(LocalDirectory);
+
+            if (directories.IsNullOrEmpty())
+            {
+                _logger.LogInformation($"No databases found within {LocalDirectory}");
+                return list;
+            }
+
+            foreach (var dir in directories)
+            {
+                _logger.LogInformation($"Adding database: {dir}");
+
                 list.Add(new DatabaseInfo()
                 {
                     DisplayDatabaseName = Path.GetFileNameWithoutExtension(dir),

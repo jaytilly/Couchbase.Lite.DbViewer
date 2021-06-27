@@ -28,6 +28,8 @@ namespace DbViewer.iOS
         private void InitializePlugins()
         { 
             Akavache.Registrations.Start(nameof(DbViewer));
+
+            Rg.Plugins.Popup.Popup.Init();
         }
     }
 }
