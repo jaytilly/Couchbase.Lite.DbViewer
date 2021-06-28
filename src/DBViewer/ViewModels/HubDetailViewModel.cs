@@ -1,7 +1,6 @@
 ﻿using Dawn;
 using DbViewer.Models;
 using DbViewer.Services;
-using DbViewer.Shared;
 using DbViewer.Shared.Dtos;
 using DbViewer.Views;
 using Prism.Navigation;

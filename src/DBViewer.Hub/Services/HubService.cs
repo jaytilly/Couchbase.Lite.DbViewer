@@ -1,4 +1,6 @@
 ﻿using Dawn;
+using DbViewer.Hub.Couchbase;
+using DbViewer.Shared.Couchbase;
 using DbViewer.Shared.Dtos;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,10 +18,11 @@ namespace DbViewer.Hub.Services
 
         private readonly ILogger<HubService> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IDatabaseConnection _databaseConnection;
 
         private HubInfo _hubInfo;
 
-        public HubService(ILogger<HubService> logger, IServiceProvider serviceProvider)
+        public HubService(ILogger<HubService> logger, IServiceProvider serviceProvider, IDatabaseConnection databaseConnection)
         {
             _logger = Guard.Argument(logger, nameof(logger))
                            .NotNull()
@@ -28,6 +31,11 @@ namespace DbViewer.Hub.Services
             _serviceProvider = Guard.Argument(serviceProvider, nameof(serviceProvider))
                                     .NotNull()
                                     .Value;
+
+            _databaseConnection = Guard.Argument(databaseConnection, nameof(databaseConnection))
+                  .NotNull()
+                  .Value;
+
         }
 
         public HubInfo GetLatestHub()
@@ -110,6 +118,55 @@ namespace DbViewer.Hub.Services
             }
 
             return scanners;
+        }
+
+        public DocumentInfo SaveDocumentToDatabase(DocumentInfo documentInfo)
+        {
+            var isConnected = _databaseConnection.Connect(documentInfo.DatabaseInfo.RemoteRootDirectory, documentInfo.DatabaseInfo.DisplayDatabaseName);
+
+            // TODO: <James Thomas: 6/27/21> Switch to full response object instead of null
+            if (!isConnected)
+            {
+                return null;
+            }
+
+            var document = _databaseConnection.GetDocumentById(documentInfo.DocumentId);
+
+            var dictionary = CbUtils.ParseTo<Dictionary<string, object>>(documentInfo.DataAsJson);
+
+            var mutableDoc = document.ToMutable();
+            mutableDoc.SetData(dictionary);
+
+            _databaseConnection.SaveDocument(mutableDoc);
+
+            mutableDoc.Dispose();
+
+            _databaseConnection.Disconnect();
+
+            return GetDocumentById(documentInfo.DatabaseInfo, documentInfo.DocumentId);
+        }
+
+        public DocumentInfo GetDocumentById(DatabaseInfo databaseInfo, string documentId)
+        {
+            var isConnected = _databaseConnection.Connect(databaseInfo.RemoteRootDirectory, databaseInfo.DisplayDatabaseName);
+
+            // TODO: <James Thomas: 6/27/21> Switch to full response object instead of null
+            if (!isConnected)
+            {
+                return null;
+            }
+
+            var document = _databaseConnection.GetDocumentById(documentId);
+
+            var updatedJson = JsonConvert.SerializeObject(document, Formatting.Indented);
+
+            var documentInfo = new DocumentInfo(databaseInfo, documentId, document.RevisionID, updatedJson);
+
+            document.Dispose();
+
+            _databaseConnection.Disconnect();
+
+            return documentInfo;
         }
 
         private static string GetPath(bool ensure = false)

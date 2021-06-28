@@ -1,5 +1,4 @@
-﻿using DbViewer.Shared;
-using DbViewer.Models;
+﻿using DbViewer.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,5 +23,9 @@ namespace DbViewer.Services
         Task<List<HubInfo>> ListAllKnownHubsAsync(CancellationToken cancellationToken);
 
         Task<bool> UpdateHubAsync(HubInfo hubInfo, CancellationToken cancellationToken);
+
+        Task<DocumentInfo> SaveDocument(DocumentInfo documentInfo, CancellationToken cancellationToken);
+
+        Task<DocumentInfo> FetchDocument(DatabaseInfo databaseInfo, string documentId, CancellationToken cancellationToken);
     }
 }

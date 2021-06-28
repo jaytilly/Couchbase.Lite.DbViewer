@@ -1,6 +1,7 @@
 ﻿using Dawn;
 using DbViewer.Hub.Services;
 using DbViewer.Shared;
+using DbViewer.Shared.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -70,6 +71,22 @@ namespace DbViewer.Hub.Controllers
             ZipFile.CreateFromDirectory(dbPath, zipPath);
 
             return !System.IO.File.Exists(zipPath) ? null : new FileStream(zipPath, FileMode.Open);
+        }
+
+        [HttpPut("Document/{documentInfo}")]
+        public  DocumentInfo SaveDocument(DocumentInfo documentInfo)
+        {
+            var updateDocumentInfo = _hubService.SaveDocumentToDatabase(documentInfo);
+
+            return updateDocumentInfo;
+        }
+
+        [HttpGet("Document")]
+        public  DocumentInfo GetDocument([FromBody] DocumentRequest documentRequest)
+        {
+            var documentInfo = _hubService.GetDocumentById(documentRequest.DatabaseInfo, documentRequest.DocumentId);
+
+            return documentInfo;
         }
     }
 }

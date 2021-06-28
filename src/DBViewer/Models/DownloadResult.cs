@@ -1,4 +1,4 @@
-﻿using DbViewer.Shared;
+﻿using DbViewer.Shared.Dtos;
 
 namespace DbViewer.Models
 {

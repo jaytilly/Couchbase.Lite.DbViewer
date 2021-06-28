@@ -1,9 +1,9 @@
 ﻿using Dawn;
-using DbViewer.Shared;
 using System;
 using System.IO;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
+using DbViewer.Shared.Dtos;
 
 namespace DbViewer.Models
 {

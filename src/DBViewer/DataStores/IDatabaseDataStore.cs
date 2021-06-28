@@ -1,9 +1,9 @@
-﻿using DbViewer.Shared;
-using DbViewer.Models;
+﻿using DbViewer.Models;
 using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using DbViewer.Shared.Dtos;
 
 namespace DbViewer.DataStores
 {

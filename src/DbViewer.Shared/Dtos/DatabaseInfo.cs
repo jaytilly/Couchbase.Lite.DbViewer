@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DbViewer.Shared
+namespace DbViewer.Shared.Dtos
 {
     public class DatabaseInfo
     {
@@ -20,7 +20,10 @@ namespace DbViewer.Shared
                 return false;
             }
 
-            return dbInfo.DisplayDatabaseName == DisplayDatabaseName;
+            return dbInfo.DisplayDatabaseName == DisplayDatabaseName &&
+                   dbInfo.FullDatabaseName == FullDatabaseName &&
+                   dbInfo.RemoteRootDirectory == RemoteRootDirectory &&
+                   dbInfo.RequestAddress.Equals(RequestAddress);
         }
 
         public override int GetHashCode()

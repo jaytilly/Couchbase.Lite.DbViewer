@@ -2,6 +2,8 @@ using Couchbase.Lite;
 using Dawn;
 using DbViewer.Dialogs;
 using DbViewer.Models;
+using DbViewer.Services;
+using DbViewer.Shared.Dtos;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Prism.Navigation;
@@ -20,14 +22,19 @@ namespace DbViewer.ViewModels
     {
         private string _documentId;
         private readonly IDialogService _dialogService;
+        private readonly IHubService _hubService;
 
         private IDatabaseConnection _databaseConnection;
         private Document _couchbaseDocument;
 
-        public DocumentViewerViewModel(INavigationService navigationService, IDialogService dialogService)
+        public DocumentViewerViewModel(INavigationService navigationService, IDialogService dialogService, IHubService hubService)
             : base(navigationService)
         {
             _dialogService = Guard.Argument(dialogService, nameof(dialogService))
+                  .NotNull()
+                  .Value;
+
+            _hubService = Guard.Argument(hubService, nameof(hubService))
                   .NotNull()
                   .Value;
 
@@ -122,38 +129,49 @@ namespace DbViewer.ViewModels
                 return;
             }
 
+            var documentInfo = new DocumentInfo(DocumentModel.Database.RemoteDatabaseInfo, _couchbaseDocument.Id, _couchbaseDocument.RevisionID, DocumentText);
 
-            var dictionary = ParseTo<Dictionary<string,object>>(DocumentText);
+            var updatedDocument = await _hubService.SaveDocument(documentInfo, cancellationToken);
+
+            if (updatedDocument == null)
+            {
+                // TODO: <James Thomas: 6/27/21> Handle 
+
+                //Log and return since we didn't save to source
+                // Do we retore json?
+
+                return;
+            }
+
+            UpdateFromDocumentInfo(updatedDocument);
+        }
+
+        private async Task ExecuteReloadAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var updatedDocument = await _hubService.FetchDocument(DocumentModel.Database.RemoteDatabaseInfo, _couchbaseDocument.Id, cancellationToken);
+
+                UpdateFromDocumentInfo(updatedDocument);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void UpdateFromDocumentInfo(DocumentInfo documentInfo)
+        {
+            var dictionary = Shared.Couchbase.CbUtils.ParseTo<Dictionary<string, object>>(documentInfo.DataAsJson);
 
             var mutableDoc = _couchbaseDocument.ToMutable();
             mutableDoc.SetData(dictionary);
 
             _databaseConnection.SaveDocument(mutableDoc);
-        }
 
-        private static T ParseTo<T>(string json)
-        {
-            T retVal = default(T);
-            try
-            {
-                var settings = new JsonSerializerSettings
-                {
-                    DateParseHandling = DateParseHandling.DateTimeOffset,
-                    TypeNameHandling = TypeNameHandling.All
-                };
-                retVal = JsonConvert.DeserializeObject<T>(json, settings);
-            }
-            catch
-            {
+            _couchbaseDocument = mutableDoc;
 
-            }
-
-            return retVal;
-        }
-
-        private async Task ExecuteReloadAsync(CancellationToken cancellationToken)
-        {
-
+            DocumentText = documentInfo.DataAsJson;
         }
 
         private async Task ExecuteShareAsync(CancellationToken cancellationToken)

@@ -1,8 +1,5 @@
-﻿using DbViewer.Shared;
-using System;
+﻿using DbViewer.Shared.Dtos;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DbViewer.Hub.Services
 {

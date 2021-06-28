@@ -1,3 +1,4 @@
+using DbViewer.Hub.Couchbase;
 using DbViewer.Hub.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Data;
 
 namespace DbViewer.Hub
 {
@@ -29,6 +31,7 @@ namespace DbViewer.Hub
             });
             services.AddLogging(logs=>logs.AddConsole());
 
+            services.AddSingleton<IDatabaseConnection,DatabaseConnection>();
             services.AddSingleton<IHubService,HubService>();
             services.AddSingleton<LocalDbScanner>();
             services.AddSingleton<IOSSimulatorDbScanner>();

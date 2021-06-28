@@ -1,5 +1,4 @@
 ﻿using Akavache;
-using DbViewer.Shared;
 using DbViewer.Models;
 using ICSharpCode.SharpZipLib.Zip;
 using System;
@@ -11,6 +10,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Threading;
 using Serilog;
+using DbViewer.Shared.Dtos;
 
 namespace DbViewer.DataStores
 {

@@ -1,5 +1,5 @@
 ﻿using Dawn;
-using DbViewer.Shared;
+using DbViewer.Shared.Dtos;
 using ReactiveUI;
 
 namespace DbViewer.ViewModels
